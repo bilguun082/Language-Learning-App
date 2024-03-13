@@ -27,9 +27,9 @@ const Slider: React.FC = () => {
   };
 
   const handleOnViewableItemsChanged = useRef(
-    ({ viewableItems }: { viewableItems: Array<[index: number]> }) => {
+    ({ viewableItems }: { viewableItems: { index: number }[] }) => {
       if (viewableItems.length > 0) {
-        setIndex(viewableItems[0].indexOf);
+        setIndex(viewableItems[0].index);
       }
     },
   ).current;
