@@ -1,27 +1,25 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+// import { Link, useGlobalSearchParams, useLocalSearchParams } from 'expo-router';
+import { View } from 'react-native';
+
+import Slider from '@/components/VocabularySlider';
+import { GridListItems } from '@/components/data';
+// import { Ionicons } from '@expo/vector-icons';x
+// import { useRouter } from 'expo-router';
+
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// import { useEffect, useState } from 'react';
 
 export default function Page(): React.ReactNode {
+  //   const { id } = useGlobalSearchParams();
+  // const router = useRouter();
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.headerText}>Vocab title</Text>
+    <View
+      style={{
+        paddingTop: 50,
+      }}>
+      <Slider data={GridListItems} />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-    paddingTop: 40,
-    paddingLeft: 15,
-    paddingRight: 15,
-  },
-  headerText: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-    fontWeight: 'bold',
-  },
-});

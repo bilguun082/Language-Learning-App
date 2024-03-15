@@ -1,4 +1,4 @@
-export default [
+export const SlideItems = [
   {
     id: 1,
     title: 'Present simple',
@@ -58,5 +58,29 @@ export default [
     title: 'Smart Lock',
     description: 'Unlock your door with your phone',
     price: '$199',
+  },
+];
+
+export const GridListItems = [
+  {
+    id: 1,
+    img: require('../assets/images/cook.webp'),
+    title: 'Apple Watch Series 7',
+    description: 'The future of health is on your wrist',
+    price: '$399',
+  },
+  {
+    id: 2,
+    img: require('../assets/images/expect.webp'),
+    title: 'AirPods Pro',
+    description: 'Active noise cancellation for immersive sound',
+    price: '$249',
+  },
+  {
+    id: 3,
+    img: require('../assets/images/make.webp'),
+    title: 'AirPods Max',
+    description: 'Effortless AirPods experience',
+    price: '$549',
   },
 ];

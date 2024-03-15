@@ -3,9 +3,17 @@ import { Animated, FlatList, NativeScrollEvent, NativeSyntheticEvent, View } fro
 
 import Pagination from './Pagination';
 import SlideItem from './SlideItem';
-import Slides from '../components/data';
 
-const Slider: React.FC = () => {
+type SliderProps = {
+  data: {
+    id: number;
+    title: string;
+    description: string;
+    price: string;
+  }[];
+};
+
+const Slider: React.FC<SliderProps> = ({ data }: SliderProps) => {
   const [index, setIndex] = useState<number>(0);
   const scrollX = useRef<Animated.Value>(new Animated.Value(0)).current;
 
@@ -41,7 +49,7 @@ const Slider: React.FC = () => {
   return (
     <View>
       <FlatList
-        data={Slides}
+        data={data}
         renderItem={({ item }) => <SlideItem item={item} />}
         horizontal
         pagingEnabled
@@ -51,7 +59,7 @@ const Slider: React.FC = () => {
         onViewableItemsChanged={handleOnViewableItemsChanged}
         viewabilityConfig={viewabilityConfig}
       />
-      <Pagination data={Slides} scrollX={scrollX} index={index} />
+      <Pagination data={data} scrollX={scrollX} index={index} />
     </View>
   );
 };

@@ -2,7 +2,12 @@ import React from 'react';
 import { StyleSheet, Animated, View, Dimensions, StyleProp, ViewStyle } from 'react-native';
 
 interface PaginationProps {
-  data: [];
+  data: {
+    id: number;
+    title: string;
+    description: string;
+    price: string;
+  }[];
   scrollX: Animated.Value;
   index: number;
 }
