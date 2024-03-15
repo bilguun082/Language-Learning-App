@@ -1,12 +1,13 @@
 import React, { useRef, useState } from 'react';
 import { Animated, FlatList, NativeScrollEvent, NativeSyntheticEvent, View } from 'react-native';
 
-import Pagination from './Pagination';
-import SlideItem from './SlideItem';
+import Pagination from './VocabularyPagination';
+import SlideItem from './VocabularySlideItem';
 
 type SliderProps = {
   data: {
     id: number;
+    img: string;
     title: string;
     description: string;
     price: string;
@@ -14,8 +15,9 @@ type SliderProps = {
 };
 
 const Slider: React.FC<SliderProps> = ({ data }: SliderProps) => {
-  const [index, setIndex] = useState<number>(0);
-  const scrollX = useRef<Animated.Value>(new Animated.Value(0)).current;
+  const [index, setIndex] = useState(0);
+  const scrollX = useRef(new Animated.Value(0)).current;
+  console.log(data);
 
   const handleOnScroll = (event: NativeSyntheticEvent<NativeScrollEvent>): void => {
     Animated.event(
@@ -36,9 +38,8 @@ const Slider: React.FC<SliderProps> = ({ data }: SliderProps) => {
 
   const handleOnViewableItemsChanged = useRef(
     ({ viewableItems }: { viewableItems: { index: number }[] }) => {
-      if (viewableItems.length > 0) {
-        setIndex(viewableItems[0].index);
-      }
+      // console.log('viewableItems', viewableItems);
+      setIndex(viewableItems[0].index);
     },
   ).current;
 

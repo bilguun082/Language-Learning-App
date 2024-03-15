@@ -4,6 +4,7 @@ import { StyleSheet, Animated, View, Dimensions, StyleProp, ViewStyle } from 're
 interface PaginationProps {
   data: {
     id: number;
+    img: string;
     title: string;
     description: string;
     price: string;
