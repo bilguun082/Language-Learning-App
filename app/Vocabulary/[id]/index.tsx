@@ -2,22 +2,9 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 import { StyleSheet, FlatList, Text, View, TouchableOpacity } from 'react-native';
 
-export default function Page(): React.ReactNode {
-  const GridListItems = [
-    { id: 1, key: 'Skptricks' },
-    { id: 2, key: 'Sumit' },
-    { id: 3, key: 'Amit' },
-    { id: 4, key: 'React' },
-    { id: 5, key: 'React Native' },
-    { id: 6, key: 'Java' },
-    { id: 7, key: 'Javascript' },
-    { id: 8, key: 'PHP' },
-    { id: 9, key: 'AJAX' },
-    { id: 10, key: 'Android' },
-    { id: 11, key: 'Selenium' },
-    { id: 12, key: 'HTML' },
-  ];
+import { GridListItems } from '@/components/data';
 
+export default function Page(): React.ReactNode {
   const router = useRouter();
 
   return (
@@ -34,7 +21,7 @@ export default function Page(): React.ReactNode {
                 params: { id: item.id },
               });
             }}>
-            <Text style={styles.GridViewTextLayout}> {item.key} </Text>
+            <Text style={styles.GridViewTextLayout}> {item.title} </Text>
           </TouchableOpacity>
         )}
         numColumns={2}
