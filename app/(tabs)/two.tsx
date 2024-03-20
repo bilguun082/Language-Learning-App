@@ -1,48 +1,48 @@
+import { useRouter } from 'expo-router';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import WordType from '@/components/WordType';
-import { useRouter } from 'expo-router';
 
 const lessons = [
   {
     id: '1',
     lesson: 1,
-    title: 'Сэдэв 1',
+    title: 'Game',
   },
   {
     id: '2',
     lesson: 2,
-    title: 'Сэдэв 2',
+    title: 'Aesthetics',
   },
   {
     id: '3',
     lesson: 3,
-    title: 'Сэдэв 3',
+    title: 'Phrasel verbs',
   },
   {
     id: '4',
     lesson: 4,
-    title: 'Сэдэв 4',
+    title: 'Action verbs',
   },
   {
     id: '5',
     lesson: 5,
-    title: 'Сэдэв 5',
+    title: 'School',
   },
   {
     id: '6',
     lesson: 6,
-    title: 'Сэдэв 6',
+    title: 'Hospital',
   },
   {
     id: '7',
     lesson: 7,
-    title: 'Сэдэв 7',
+    title: 'Building',
   },
   {
     id: '8',
     lesson: 8,
-    title: 'Сэдэв 8',
+    title: 'Sports',
   },
 ];
 
