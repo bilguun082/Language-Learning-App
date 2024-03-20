@@ -7,6 +7,7 @@ const RootLayoutNav: React.FC = () => {
       <Stack.Screen name="Grammar/[id]" options={{ headerShown: false }} />
       <Stack.Screen name="Vocabulary/[id]/index" options={{ headerShown: false }} />
       <Stack.Screen name="Vocabulary/[id]/[id]" options={{ headerShown: false }} />
+      <Stack.Screen name="Task/index" options={{ headerShown: false }} />
     </Stack>
   );
 };
