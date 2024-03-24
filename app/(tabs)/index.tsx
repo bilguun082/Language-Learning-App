@@ -1,8 +1,8 @@
-import { Link, useRouter } from 'expo-router';
+import { useUser } from '@clerk/clerk-expo';
+import { useRouter } from 'expo-router';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import WordType from '@/components/WordType';
-import { useUser } from '@clerk/clerk-expo';
 
 const lessons = [
   {
@@ -49,8 +49,8 @@ const lessons = [
 
 export default function TabOneScreen(): React.ReactNode {
   const router = useRouter();
-  const { user, isSignedIn } = useUser();
-  console.log(user?.fullName);
+  const { user } = useUser();
+  console.log(user?.username);
 
   return (
     <View style={styles.container}>
@@ -60,13 +60,7 @@ export default function TabOneScreen(): React.ReactNode {
           <View>
             <View style={styles.userView}>
               <View>
-                {Boolean(isSignedIn) ? (
-                  <Text style={styles.header}>Сайн уу {user?.fullName},</Text>
-                ) : (
-                  <Link href={'/SignIn/'}>
-                    <Text style={styles.header}>Нэвтрэх</Text>
-                  </Link>
-                )}
+                <Text style={styles.header}>Сайн уу {user?.username},</Text>
 
                 <Text style={styles.title}>Continue to English!</Text>
               </View>
