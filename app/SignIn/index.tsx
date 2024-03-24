@@ -1,7 +1,7 @@
 import { useSignIn } from '@clerk/clerk-expo';
 import { Link, useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Button, Pressable, Text } from 'react-native';
+import { View, StyleSheet, TextInput, Pressable, Text, TouchableOpacity } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function SignInScreen(): React.ReactNode {
@@ -51,16 +51,23 @@ export default function SignInScreen(): React.ReactNode {
         style={styles.inputField}
       />
 
-      <Button onPress={() => onSignInPress} title="Login" color="#6c47ff" />
+      <TouchableOpacity
+        onPress={() => {
+          onSignInPress();
+        }}>
+        <View style={styles.button}>
+          <Text style={styles.text}>Login</Text>
+        </View>
+      </TouchableOpacity>
 
-      {/* <Link href="/reset" asChild>
+      <Link href="/Reset/" asChild>
         <Pressable style={styles.button}>
           <Text>Forgot password?</Text>
         </Pressable>
-      </Link> */}
+      </Link>
       <Link href="/SignUp/" asChild>
         <Pressable style={styles.button}>
-          <Text>Create Account</Text>
+          <Text style={styles.text}>Create Account</Text>
         </Pressable>
       </Link>
     </View>
@@ -72,10 +79,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
+    alignItems: 'center',
   },
   inputField: {
     marginVertical: 4,
     height: 50,
+    width: '90%',
     borderWidth: 1,
     borderColor: '#6c47ff',
     borderRadius: 4,
@@ -83,61 +92,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   button: {
-    margin: 8,
+    backgroundColor: '#5E5DF0',
+    borderRadius: 999,
+    shadowColor: '#5E5DF0',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.5,
+    shadowRadius: 20,
+    width: 200,
     alignItems: 'center',
+    margin: 10,
+    opacity: 1,
+    paddingTop: 8,
+    paddingRight: 18,
+    paddingBottom: 8,
+    paddingLeft: 18,
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: '700', // Change to string value
+    lineHeight: 24,
+    color: 'white',
   },
 });
-
-// import { useSignIn } from '@clerk/clerk-expo';
-// import React from 'react';
-// import { Text, TextInput, TouchableOpacity, View } from 'react-native';
-
-// export default function SignInScreen(): React.ReactNode {
-//   const { signIn, setActive, isLoaded } = useSignIn();
-
-//   const [emailAddress, setEmailAddress] = React.useState('');
-//   const [password, setPassword] = React.useState('');
-
-//   const onSignInPress = async (): Promise<void> => {
-//     if (!isLoaded) {
-//       return;
-//     }
-
-//     try {
-//       const completeSignIn = await signIn.create({
-//         identifier: emailAddress,
-//         password,
-//       });
-//       // This is an important step,
-//       // This indicates the user is signed in
-//       await setActive({ session: completeSignIn.createdSessionId });
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
-//   return (
-//     <View>
-//       <View>
-//         <TextInput
-//           autoCapitalize="none"
-//           value={emailAddress}
-//           placeholder="Email..."
-//           onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
-//         />
-//       </View>
-
-//       <View>
-//         <TextInput
-//           value={password}
-//           placeholder="Password..."
-//           secureTextEntry={true}
-//           onChangeText={(password) => setPassword(password)}
-//         />
-//       </View>
-
-//       <TouchableOpacity onPress={onSignInPress}>
-//         <Text>Sign in</Text>
-//       </TouchableOpacity>
-//     </View>
-//   );
-// }
