@@ -46,7 +46,7 @@ const lessons = [
   },
 ];
 
-export default function TabOneScreen(): React.ReactNode {
+export default function TabTwoScreen(): React.ReactNode {
   const router = useRouter();
 
   return (
