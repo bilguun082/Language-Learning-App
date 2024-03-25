@@ -22,6 +22,36 @@ export default function Page(): React.ReactNode {
               });
             }}>
             <Text style={styles.GridViewTextLayout}> {item.title} </Text>
+            <TouchableOpacity
+              style={{ width: '100%', paddingLeft: 30, paddingRight: 30 }}
+              onPress={() => {
+                router.push('/VocabTest/');
+              }}>
+              <View
+                style={{
+                  backgroundColor: '#5E5DF0',
+                  borderRadius: 999,
+                  shadowColor: '#5E5DF0',
+                  shadowOffset: { width: 0, height: 10 },
+                  shadowOpacity: 0.5,
+                  shadowRadius: 20,
+                  opacity: 1,
+                  paddingTop: 8,
+                  paddingRight: 18,
+                  paddingBottom: 8,
+                  paddingLeft: 18,
+                }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: '700', // Change to string value
+                    lineHeight: 24,
+                    color: 'white',
+                  }}>
+                  Test
+                </Text>
+              </View>
+            </TouchableOpacity>
           </TouchableOpacity>
         )}
         numColumns={2}
