@@ -1,12 +1,16 @@
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
 import { Stack, useRouter } from 'expo-router';
 import { useEffect } from 'react';
 
 const RootLayoutNav: React.FC = () => {
+  const client = new ApolloClient({
+    uri: 'https://nextjs-graphql-chi.vercel.app/api/graphql',
+    cache: new InMemoryCache(),
+  });
   const InitialLayout = (): React.JSX.Element => {
     const { isLoaded, isSignedIn } = useAuth();
     const router = useRouter();
-
     // If the user is signed in, redirect them to the home page
     // If the user is not signed in, redirect them to the login page
     useEffect(() => {
@@ -30,9 +34,11 @@ const RootLayoutNav: React.FC = () => {
   };
 
   return (
-    <ClerkProvider publishableKey={`${process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}`}>
-      <InitialLayout />
-    </ClerkProvider>
+    <ApolloProvider client={client}>
+      <ClerkProvider publishableKey={`${process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}`}>
+        <InitialLayout />
+      </ClerkProvider>
+    </ApolloProvider>
   );
 };
 
