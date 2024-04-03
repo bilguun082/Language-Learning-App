@@ -1,25 +1,17 @@
 import { gql } from '@apollo/client';
 
-export const GET_VOCABULARY = gql`
-  query Query($getVocabularyId: String!) {
-    getVocabulary(id: $getVocabularyId) {
+export const GET_ALL_VOCABULARIES = gql`
+  query Query {
+    getAllVocabularies {
       id
       title
-      words {
-        id
-        image
-        word
-        translation
-        exampleSentence
-        isSaved
-      }
     }
   }
 `;
 
-export const GET_ALL_VOCABULARIES = gql`
-  query Query {
-    getAllVocabularies {
+export const GET_VOCABULARY = gql`
+  query Query($getVocabularyId: String!) {
+    getVocabulary(id: $getVocabularyId) {
       id
       title
       words {

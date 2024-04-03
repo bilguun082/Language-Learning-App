@@ -14,12 +14,18 @@ import SlideItem from './SlideItem';
 
 type SliderProps = {
   data: {
-    id: number;
+    id: string;
     title: string;
-    description: string;
-    price: string;
-    isLast: boolean;
-  }[];
+    isSaved: boolean;
+    facts: Fact[][];
+  };
+};
+
+type Fact = {
+  id: string;
+  image: string;
+  fact: string;
+  exampleSentence: string;
 };
 
 const Slider: React.FC<SliderProps> = ({ data }: SliderProps) => {
@@ -58,7 +64,7 @@ const Slider: React.FC<SliderProps> = ({ data }: SliderProps) => {
   return (
     <View>
       <FlatList
-        data={data}
+        data={data?.facts}
         renderItem={({ item }) => <SlideItem item={item} />}
         horizontal
         pagingEnabled

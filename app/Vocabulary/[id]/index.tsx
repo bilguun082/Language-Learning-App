@@ -1,57 +1,39 @@
-import { useRouter } from 'expo-router';
+import { useQuery } from '@apollo/client';
+import { useRouter, useGlobalSearchParams } from 'expo-router';
 import React from 'react';
 import { StyleSheet, FlatList, Text, View, TouchableOpacity } from 'react-native';
 
-import { GridListItems } from '@/components/data';
+import { GET_VOCABULARY } from '@/app/graphql/vocabulary';
+// import { GridListItems } from '@/components/data';
 
 export default function Page(): React.ReactNode {
   const router = useRouter();
+  const { id }: { id: string } = useGlobalSearchParams();
+  const { data, error, loading } = useQuery(GET_VOCABULARY, {
+    variables: {
+      getVocabularyId: id,
+    },
+  });
+
+  if (loading) return <Text>Loading...</Text>;
+  if (error) return <Text>Error :</Text>;
 
   return (
     <View style={styles.container}>
       <Text style={{ textAlign: 'center', fontSize: 20, fontWeight: 'bold' }}>Vocab title</Text>
       <FlatList
-        data={GridListItems}
+        data={data?.getVocabulary?.words}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.GridViewContainer}
             onPress={() => {
+              console.log(id);
               router.push({
-                pathname: '/Vocabulary/[id]/[id]',
-                params: { id: item.id },
+                pathname: '/Vocabulary/[id]/[tiimId]',
+                params: { id, tiimId: item.id },
               });
             }}>
-            <Text style={styles.GridViewTextLayout}> {item.title} </Text>
-            <TouchableOpacity
-              style={{ width: '100%', paddingLeft: 30, paddingRight: 30 }}
-              onPress={() => {
-                router.push('/VocabTest/');
-              }}>
-              <View
-                style={{
-                  backgroundColor: '#5E5DF0',
-                  borderRadius: 999,
-                  shadowColor: '#5E5DF0',
-                  shadowOffset: { width: 0, height: 10 },
-                  shadowOpacity: 0.5,
-                  shadowRadius: 20,
-                  opacity: 1,
-                  paddingTop: 8,
-                  paddingRight: 18,
-                  paddingBottom: 8,
-                  paddingLeft: 18,
-                }}>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: '700', // Change to string value
-                    lineHeight: 24,
-                    color: 'white',
-                  }}>
-                  Test
-                </Text>
-              </View>
-            </TouchableOpacity>
+            <Text style={styles.GridViewTextLayout}> {item.word} </Text>
           </TouchableOpacity>
         )}
         numColumns={2}

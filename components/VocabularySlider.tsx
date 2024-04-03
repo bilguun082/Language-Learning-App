@@ -6,18 +6,24 @@ import SlideItem from './VocabularySlideItem';
 
 type SliderProps = {
   data: {
-    id: number;
-    img: string;
+    id: string;
     title: string;
-    description: string;
-    price: string;
-  }[];
+    words: Word[][];
+  };
+};
+
+type Word = {
+  id: string;
+  image: string;
+  word: string;
+  translation: string;
+  exampleSentence: string;
+  isSaved: boolean;
 };
 
 const Slider: React.FC<SliderProps> = ({ data }: SliderProps) => {
   const [index, setIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
-  console.log(data);
 
   const handleOnScroll = (event: NativeSyntheticEvent<NativeScrollEvent>): void => {
     Animated.event(
@@ -50,7 +56,7 @@ const Slider: React.FC<SliderProps> = ({ data }: SliderProps) => {
   return (
     <View>
       <FlatList
-        data={data}
+        data={data.words}
         renderItem={({ item }) => <SlideItem item={item} />}
         horizontal
         pagingEnabled

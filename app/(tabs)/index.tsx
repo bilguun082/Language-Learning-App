@@ -1,61 +1,26 @@
+import { useQuery } from '@apollo/client';
 import { useUser } from '@clerk/clerk-expo';
 import { useRouter } from 'expo-router';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+import { GET_ALL_LESSONS } from '../graphql/lesson';
+
 import WordType from '@/components/WordType';
 
-const lessons = [
-  {
-    id: '1',
-    lesson: 1,
-    title: 'Present Simple',
-  },
-  {
-    id: '2',
-    lesson: 2,
-    title: 'Present Continuous',
-  },
-  {
-    id: '3',
-    lesson: 3,
-    title: 'Past Simple',
-  },
-  {
-    id: '4',
-    lesson: 4,
-    title: 'Past Simple Continuous',
-  },
-  {
-    id: '5',
-    lesson: 5,
-    title: 'Present Perfect',
-  },
-  {
-    id: '6',
-    lesson: 6,
-    title: 'Present Perfect Continuous',
-  },
-  {
-    id: '7',
-    lesson: 7,
-    title: 'Past Perfect',
-  },
-  {
-    id: '8',
-    lesson: 8,
-    title: 'Past Perfect Continuous',
-  },
-];
-
 export default function TabOneScreen(): React.ReactNode {
+  const { data, error, loading } = useQuery(GET_ALL_LESSONS);
+  // const [data,setData ] = useState()
   const router = useRouter();
   const { user } = useUser();
-  console.log(user?.username);
+  // console.log(data);
+
+  if (loading) return <Text>Loading...</Text>;
+  if (error) return <Text>Error :</Text>;
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={lessons}
+        data={data?.getAllLessons}
         ListHeaderComponent={() => (
           <View>
             <View style={styles.userView}>
@@ -86,7 +51,7 @@ export default function TabOneScreen(): React.ReactNode {
                 params: { id: item.id },
               });
             }}>
-            <WordType lesson={item.lesson} title={item.title} />
+            <WordType title={item.title} />
           </TouchableOpacity>
         )}
         keyExtractor={(item) => item.id.toString()}

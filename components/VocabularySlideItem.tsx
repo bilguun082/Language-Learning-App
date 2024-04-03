@@ -13,16 +13,18 @@ const { width, height } = Dimensions.get('screen');
 
 interface SlideItemProps {
   item: {
-    title: string;
-    img: ImageSourcePropType;
-    description: string;
-    price: string;
+    id: string;
+    image: ImageSourcePropType;
+    word: string;
+    translation: string;
+    exampleSentence: string;
+    isSaved: boolean;
   };
 }
 
 const SlideItem: React.FC<SlideItemProps> = ({ item }) => {
   const translateYImage = new Animated.Value(40);
-  console.log(item.img);
+  console.log(item.image);
 
   Animated.timing(translateYImage, {
     toValue: 0,
@@ -35,7 +37,7 @@ const SlideItem: React.FC<SlideItemProps> = ({ item }) => {
   return (
     <View style={styles.container}>
       <Animated.Image
-        source={item.img}
+        source={item.image}
         resizeMode="contain"
         style={[
           styles.image,
@@ -50,9 +52,9 @@ const SlideItem: React.FC<SlideItemProps> = ({ item }) => {
       />
 
       <View style={styles.content}>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.description}>{item.description}</Text>
-        <Text style={styles.price}>{item.price}</Text>
+        <Text style={styles.title}>{item.word}</Text>
+        <Text style={styles.description}>{item.translation}</Text>
+        <Text style={styles.price}>{item.exampleSentence}</Text>
       </View>
     </View>
   );

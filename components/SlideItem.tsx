@@ -1,38 +1,33 @@
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TouchableOpacity, Image } from 'react-native';
 
 const { width, height } = Dimensions.get('screen');
 
 interface SlideItemProps {
   item: {
-    title: string;
-    description: string;
-    price: string;
-    isLast: boolean;
+    image: string;
+    fact: string;
+    exampleSentence: string;
   };
 }
 
 const SlideItem: React.FC<SlideItemProps> = ({ item }) => {
   const router = useRouter();
-  if (!item.isLast) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>{item.title}</Text>
-        <View style={styles.content}>
-          <Text style={styles.description}>{item.description}</Text>
-          <Text style={styles.description}>{item.price}</Text>
-        </View>
-      </View>
-    );
-  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{item.title}</Text>
+      <Text style={styles.title}>Хичээл</Text>
       <View style={styles.content}>
-        <Text style={styles.description}>{item.description}</Text>
-        <Text style={styles.description}>{item.price}</Text>
+        <Image
+          source={{
+            uri: item.image,
+          }}
+          width={300}
+          height={200}
+        />
+        <Text style={styles.description}>{item.fact}</Text>
+        <Text style={styles.description}>{item.exampleSentence}</Text>
         <TouchableOpacity
           style={{ width: '100%', paddingLeft: 30, paddingRight: 30 }}
           onPress={() => {
