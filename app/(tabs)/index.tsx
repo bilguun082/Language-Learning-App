@@ -1,3 +1,4 @@
+import { useUser } from '@clerk/clerk-expo';
 import { useRouter } from 'expo-router';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -48,6 +49,8 @@ const lessons = [
 
 export default function TabOneScreen(): React.ReactNode {
   const router = useRouter();
+  const { user } = useUser();
+  console.log(user?.username);
 
   return (
     <View style={styles.container}>
@@ -57,7 +60,8 @@ export default function TabOneScreen(): React.ReactNode {
           <View>
             <View style={styles.userView}>
               <View>
-                <Text style={styles.header}>Сайн уу Bilguun,</Text>
+                <Text style={styles.header}>Сайн уу {user?.username},</Text>
+
                 <Text style={styles.title}>Continue to English!</Text>
               </View>
             </View>
