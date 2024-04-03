@@ -1,11 +1,15 @@
+import { useMutation } from '@apollo/client';
 import { useSignUp } from '@clerk/clerk-expo';
 import { Stack, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { TextInput, View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 
+import { REGISTER_USER } from '../graphql/user';
+
 export default function SignUpScreen(): React.ReactNode {
   const { isLoaded, signUp, setActive } = useSignUp();
+  const [registerUser, { data }] = useMutation(REGISTER_USER);
   const router = useRouter();
   const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');
@@ -13,7 +17,6 @@ export default function SignUpScreen(): React.ReactNode {
   const [pendingVerification, setPendingVerification] = useState(false);
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
-
   const onSignUpPress = async (): Promise<void> => {
     if (!isLoaded) {
       return;
@@ -27,6 +30,17 @@ export default function SignUpScreen(): React.ReactNode {
         emailAddress,
         password,
       });
+
+      await registerUser({
+        variables: {
+          input: {
+            email: emailAddress,
+            username,
+          },
+        },
+      });
+
+      console.log(data);
 
       // Send verification Email
       await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
@@ -51,7 +65,9 @@ export default function SignUpScreen(): React.ReactNode {
         code,
       });
 
-      await setActive({ session: completeSignUp.createdSessionId });
+      const data = await setActive({ session: completeSignUp.createdSessionId });
+
+      console.log(data);
       router.push('/(tabs)');
     } catch (err) {
       alert(err);

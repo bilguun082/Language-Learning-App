@@ -6,12 +6,6 @@ export const GET_ALL_LESSONS = gql`
       id
       title
       isSaved
-      facts {
-        id
-        image
-        fact
-        exampleSentence
-      }
     }
   }
 `;
