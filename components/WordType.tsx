@@ -2,13 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function WordType({
-  lesson,
-  title,
-}: {
-  lesson: number;
-  title: string;
-}): React.ReactNode {
+export default function WordType({ title }: { title: string }): React.ReactNode {
   return (
     <View style={{ ...styles.container, ...styles.shadowProp }}>
       <Feather name="file-text" size={24} color="black" />

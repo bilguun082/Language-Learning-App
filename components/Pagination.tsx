@@ -1,23 +1,30 @@
 import React from 'react';
 import { StyleSheet, Animated, View, Dimensions, StyleProp, ViewStyle } from 'react-native';
 
-interface PaginationProps {
+type PaginationProps = {
   data: {
-    id: number;
+    id: string;
     title: string;
-    description: string;
-    price: string;
-  }[];
+    isSaved: boolean;
+    facts: Fact[][];
+  };
   scrollX: Animated.Value;
   index: number;
-}
+};
+
+type Fact = {
+  id: string;
+  image: string;
+  fact: string;
+  exampleSentence: string;
+};
 
 const { width } = Dimensions.get('screen');
 
 const Pagination: React.FC<PaginationProps> = ({ data, scrollX, index }) => {
   return (
     <View style={styles.container}>
-      {data.map((_, idx) => {
+      {data?.facts.map((_, idx) => {
         const inputRange = [(idx - 1) * width, idx * width, (idx + 1) * width];
 
         const dotWidth = scrollX.interpolate({
