@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 const RootLayoutNav: React.FC = () => {
   const client = new ApolloClient({
-    uri: 'https://nextjs-graphql-chi.vercel.app/api/graphql',
+    uri: 'https://app-backend-mauve.vercel.app/api/graphql',
     cache: new InMemoryCache(),
   });
   const InitialLayout = (): React.JSX.Element => {
