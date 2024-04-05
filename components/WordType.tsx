@@ -2,12 +2,18 @@ import { Feather } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function WordType({ title }: { title: string }): React.ReactNode {
+export default function WordType({
+  title,
+  isSaved,
+}: {
+  title: string;
+  isSaved: boolean;
+}): React.ReactNode {
+  console.log(isSaved);
   return (
     <View style={{ ...styles.container, ...styles.shadowProp }}>
       <Feather name="file-text" size={24} color="black" />
       <Text>{title}</Text>
-      {/* <BookIcon /> */}
     </View>
   );
 }
