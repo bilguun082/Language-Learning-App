@@ -6,6 +6,8 @@ export const GET_ALL_LESSONS = gql`
       id
       title
       isSaved
+      isStarted
+      isDone
     }
   }
 `;
@@ -16,27 +18,14 @@ export const GET_LESSON = gql`
       id
       title
       isSaved
+      isStarted
+      isDone
       facts {
         id
         image
         fact
         exampleSentence
-      }
-    }
-  }
-`;
-
-export const CREATE_LESSON = gql`
-  mutation Mutation($input: LessonInput!) {
-    createLesson(input: $input) {
-      id
-      title
-      isSaved
-      facts {
-        id
-        image
-        fact
-        exampleSentence
+        isLast
       }
     }
   }
@@ -45,15 +34,9 @@ export const CREATE_LESSON = gql`
 export const UPDATE_LESSON = gql`
   mutation Mutation($updateLessonId: String!, $input: UpdateInput!) {
     updateLesson(id: $updateLessonId, input: $input) {
-      id
-      title
+      isDone
       isSaved
-      facts {
-        id
-        image
-        fact
-        exampleSentence
-      }
+      isStarted
     }
   }
 `;

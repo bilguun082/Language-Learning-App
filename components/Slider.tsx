@@ -26,6 +26,7 @@ type Fact = {
   image: string;
   fact: string;
   exampleSentence: string;
+  isLast: boolean;
 };
 
 const Slider: React.FC<SliderProps> = ({ data }: SliderProps) => {

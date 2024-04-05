@@ -14,6 +14,8 @@ export const GET_VOCABULARY = gql`
     getVocabulary(id: $getVocabularyId) {
       id
       title
+      isStarted
+      isDone
       words {
         id
         image
@@ -21,23 +23,7 @@ export const GET_VOCABULARY = gql`
         translation
         exampleSentence
         isSaved
-      }
-    }
-  }
-`;
-
-export const CREATE_VOCABULARY = gql`
-  mutation Mutation($input: VocabularyInput!) {
-    createVocabulary(input: $input) {
-      id
-      title
-      words {
-        id
-        image
-        word
-        translation
-        exampleSentence
-        isSaved
+        isLast
       }
     }
   }
@@ -46,16 +32,8 @@ export const CREATE_VOCABULARY = gql`
 export const UPDATE_VOCABULARY = gql`
   mutation Mutation($updateVocabularyId: String!, $input: VocabularyUpdateInput!) {
     updateVocabulary(id: $updateVocabularyId, input: $input) {
-      id
-      title
-      words {
-        id
-        image
-        word
-        translation
-        exampleSentence
-        isSaved
-      }
+      isDone
+      isStarted
     }
   }
 `;

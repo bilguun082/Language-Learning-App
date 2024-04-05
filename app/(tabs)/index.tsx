@@ -12,7 +12,7 @@ export default function TabOneScreen(): React.ReactNode {
   // const [data,setData ] = useState()
   const router = useRouter();
   const { user } = useUser();
-  // console.log(data);
+  console.log(data);
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error :</Text>;
@@ -51,7 +51,7 @@ export default function TabOneScreen(): React.ReactNode {
                 params: { id: item.id },
               });
             }}>
-            <WordType title={item.title} />
+            <WordType title={item.title} isSaved={item.isSaved} />
           </TouchableOpacity>
         )}
         keyExtractor={(item) => item.id.toString()}
