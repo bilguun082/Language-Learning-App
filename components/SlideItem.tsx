@@ -6,6 +6,7 @@ const { width, height } = Dimensions.get('screen');
 
 interface SlideItemProps {
   item: {
+    title: string;
     image: string;
     fact: string;
     exampleSentence: string;
@@ -15,6 +16,7 @@ interface SlideItemProps {
 
 const SlideItem: React.FC<SlideItemProps> = ({ item }) => {
   const router = useRouter();
+  console.log(item);
 
   return (
     <View style={styles.container}>
@@ -35,6 +37,7 @@ const SlideItem: React.FC<SlideItemProps> = ({ item }) => {
             onPress={() => {
               router.push({
                 pathname: '/Task/',
+                params: { title: item.title },
               });
             }}>
             <View

@@ -1,34 +1,40 @@
+import { useQuery } from '@apollo/client';
+import { useGlobalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Button } from 'react-native';
 
+import { GET_VOCABULARY_TEST } from '../graphql/vocabularyTest';
+
+interface VocabularySelectionTest {
+  id: string;
+  question: string;
+  words: string[];
+  correctAnswer: string;
+  isLast: boolean;
+}
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: '100%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
   },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-    width: '100%',
-  },
-  wordList: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
+  question: {
+    fontSize: 20,
+    fontWeight: 'bold',
     marginBottom: 20,
   },
   word: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    padding: 10,
     margin: 5,
     borderWidth: 1,
-    borderColor: '#ccc',
     borderRadius: 5,
+    backgroundColor: '#f0f0f0',
+  },
+  selectedWord: {
+    backgroundColor: '#ccc',
   },
   button: {
     padding: 10,
@@ -39,13 +45,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     textAlign: 'center',
-  },
-  option: {
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    marginBottom: 10,
   },
   modalContainer: {
     flex: 1,
@@ -61,56 +60,50 @@ const styles = StyleSheet.create({
   },
 });
 
-const tasks = [
-  {
-    type: 'quiz',
-    question: 'What is the meaning of play?',
-    options: ['тоглох', 'дуулах', 'идэх', 'амрах'],
-    answer: 'тоглох',
-  },
-  {
-    type: 'quiz',
-    question: 'What is the meaning of sing?',
-    options: ['тоолох', 'унших', 'сонсох', 'дуулах'],
-    answer: 'дуулах',
-  },
-];
-
 const Page: React.FC = () => {
+  const { title }: { title: string } = useGlobalSearchParams();
+  const { data, error, loading } = useQuery(GET_VOCABULARY_TEST, {
+    variables: {
+      title,
+    },
+  });
+
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedWord, setSelectedWord] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
 
-  const handleAnswerSelect = (option: string): void => {
-    const currentTask = tasks[currentTaskIndex];
-    if (option === currentTask.answer) {
-      setUserAnswers([...userAnswers, option]);
+  const handleAnswerSelect = (word: string): void => {
+    const currentTask = data?.getVocabularyTest.vocabularySelectionTests[currentTaskIndex];
+    if (word === currentTask?.correctAnswer) {
+      setUserAnswers([...userAnswers, word]);
     }
-    setSelectedOption(option);
+    setSelectedWord(word);
     setTimeout(() => {
       handleNext();
     }, 500);
   };
 
   const handleNext = (): void => {
-    if (currentTaskIndex < tasks.length - 1) {
-      setSelectedOption(null);
+    if (currentTaskIndex < data?.getVocabularyTest.vocabularySelectionTests.length - 1) {
+      setSelectedWord(null);
       setCurrentTaskIndex(currentTaskIndex + 1);
     } else {
       setShowModal(true);
     }
   };
 
-  const calculateGrade = (answers: string[]): number => {
-    const correctAnswers = tasks.map((task) => task.answer);
-    const userGrade = answers.reduce((grade, answer, index) => {
+  const calculateGrade = (): number => {
+    const correctAnswers = data?.getVocabularyTest.vocabularySelectionTests.map(
+      (task: VocabularySelectionTest) => task.correctAnswer,
+    );
+    const userGrade = userAnswers.reduce((grade, answer, index) => {
       if (answer === correctAnswers[index]) {
         return grade + 1;
       }
       return grade;
     }, 0);
-    return (userGrade / tasks.length) * 100;
+    return (userGrade / correctAnswers.length) * 100;
   };
 
   const closeModal = (): void => {
@@ -118,56 +111,64 @@ const Page: React.FC = () => {
   };
 
   const renderQuizTask = (): JSX.Element => {
-    const { question, options } = tasks[currentTaskIndex];
+    const task = data?.getVocabularyTest.vocabularySelectionTests[currentTaskIndex];
+    const { question, words } = task;
     return (
       <View style={styles.container}>
-        <Text>{question}</Text>
-        {options.map((option) => (
-          <TouchableOpacity
-            key={option}
-            style={[styles.option, option === selectedOption && { backgroundColor: 'gray' }]}
-            onPress={() => handleAnswerSelect(option)}>
-            <Text>{option}</Text>
-          </TouchableOpacity>
-        ))}
-        {currentTaskIndex === tasks.length - 1 ? (
-          <TouchableOpacity style={styles.button} onPress={handleNext}>
-            <Text style={styles.buttonText}>Done</Text>
-          </TouchableOpacity>
-        ) : null}
+        <Text style={styles.question}>{question}</Text>
+        <View style={{ flexDirection: 'column', flexWrap: 'wrap' }}>
+          {words.map((word: string) => (
+            <TouchableOpacity
+              key={word}
+              style={[styles.word, word === selectedWord && styles.selectedWord]}
+              onPress={() => handleAnswerSelect(word)}
+              disabled={selectedWord !== null}>
+              <Text>{word}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleNext}
+          disabled={selectedWord === null}>
+          <Text style={styles.buttonText}>
+            {currentTaskIndex === data.getVocabularyTest.vocabularySelectionTests.length - 1
+              ? 'Done'
+              : 'Next'}
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   };
 
   const renderModal = (): JSX.Element => {
-    const grade = calculateGrade(userAnswers);
+    const grade = calculateGrade();
     return (
       <Modal visible={showModal} animationType="slide" transparent>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text>Your Grade: {grade}%</Text>
-            {tasks.map((task, index) => (
-              <Text key={index}>
-                {task.question}: {task.answer}
-              </Text>
-            ))}
-            <Button title="хаах" onPress={closeModal} />
+            <Text>Your Grade: {grade.toFixed(2)}%</Text>
+            <Button title="Close" onPress={closeModal} />
           </View>
         </View>
       </Modal>
     );
   };
 
-  const renderTask = (): JSX.Element => {
-    return (
-      <>
-        {renderQuizTask()}
-        {renderModal()}
-      </>
-    );
-  };
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
 
-  return <View style={styles.container}>{renderTask()}</View>;
+  if (error) {
+    return <Text>Error fetching data</Text>;
+  }
+
+  return (
+    <View>
+      {renderQuizTask()}
+      {renderModal()}
+    </View>
+  );
 };
 
 export default Page;
