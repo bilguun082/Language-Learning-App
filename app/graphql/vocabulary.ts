@@ -18,6 +18,7 @@ export const GET_VOCABULARY = gql`
       isDone
       words {
         id
+        title
         image
         word
         translation

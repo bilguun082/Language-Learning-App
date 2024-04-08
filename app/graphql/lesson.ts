@@ -22,6 +22,7 @@ export const GET_LESSON = gql`
       isDone
       facts {
         id
+        title
         image
         fact
         exampleSentence

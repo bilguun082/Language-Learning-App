@@ -15,7 +15,7 @@ export default function Page(): React.ReactNode {
     },
   });
 
-  console.log(error);
+  console.log(data);
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error :</Text>;

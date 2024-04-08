@@ -1,14 +1,16 @@
 import { gql } from '@apollo/client';
 
 export const GET_VOCABULARY_TEST = gql`
-  query Query($getVocabularyTestId: String!) {
-    getVocabularyTest(id: $getVocabularyTestId) {
+  query GetVocabularyTest($title: String!) {
+    getVocabularyTest(title: $title) {
       id
+      title
       vocabularySelectionTests {
         id
         question
         words
         correctAnswer
+        isLast
       }
       grade
     }

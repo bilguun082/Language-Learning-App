@@ -23,6 +23,7 @@ type SliderProps = {
 
 type Fact = {
   id: string;
+  title: string;
   image: string;
   fact: string;
   exampleSentence: string;
