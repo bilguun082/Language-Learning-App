@@ -1,38 +1,29 @@
 import React, { useRef, useState } from 'react';
-import {
-  Animated,
-  FlatList,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  // Text,
-  // TouchableOpacity,
-  View,
-} from 'react-native';
+import { Animated, FlatList, NativeScrollEvent, NativeSyntheticEvent, View } from 'react-native';
 
-import Pagination from './Pagination';
-import SlideItem from './SlideItem';
+import Pagination from './VocabularyPagination';
+import SlideItem from './VocabularySlideItem';
 
 type SliderProps = {
   data: {
     id: string;
     title: string;
-    isSaved: boolean;
-    facts: Fact[][];
+    words: Word[][];
   };
 };
 
-type Fact = {
+type Word = {
   id: string;
-  title: string;
   image: string;
-  fact: string;
+  word: string;
+  translation: string;
   exampleSentence: string;
-  isLast: boolean;
+  isSaved: boolean;
 };
 
 const Slider: React.FC<SliderProps> = ({ data }: SliderProps) => {
-  const [index, setIndex] = useState<number>(0);
-  const scrollX = useRef<Animated.Value>(new Animated.Value(0)).current;
+  const [index, setIndex] = useState(0);
+  const scrollX = useRef(new Animated.Value(0)).current;
 
   const handleOnScroll = (event: NativeSyntheticEvent<NativeScrollEvent>): void => {
     Animated.event(
@@ -53,9 +44,7 @@ const Slider: React.FC<SliderProps> = ({ data }: SliderProps) => {
 
   const handleOnViewableItemsChanged = useRef(
     ({ viewableItems }: { viewableItems: { index: number }[] }) => {
-      if (viewableItems.length > 0) {
-        setIndex(viewableItems[0].index);
-      }
+      setIndex(viewableItems[0].index);
     },
   ).current;
 
@@ -66,7 +55,7 @@ const Slider: React.FC<SliderProps> = ({ data }: SliderProps) => {
   return (
     <View>
       <FlatList
-        data={data?.facts}
+        data={data.words}
         renderItem={({ item }) => <SlideItem item={item} />}
         horizontal
         pagingEnabled
@@ -76,9 +65,6 @@ const Slider: React.FC<SliderProps> = ({ data }: SliderProps) => {
         onViewableItemsChanged={handleOnViewableItemsChanged}
         viewabilityConfig={viewabilityConfig}
       />
-      {/* <TouchableOpacity>
-        <Text>Дасгал ажиллах</Text>
-      </TouchableOpacity> */}
       <Pagination data={data} scrollX={scrollX} index={index} />
     </View>
   );

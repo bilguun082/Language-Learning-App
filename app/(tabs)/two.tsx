@@ -1,58 +1,22 @@
+import { useQuery } from '@apollo/client';
+import { useRouter } from 'expo-router';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import WordType from '@/components/WordType';
-import { useRouter } from 'expo-router';
+import { GET_ALL_VOCABULARIES } from '../graphql/vocabulary';
 
-const lessons = [
-  {
-    id: '1',
-    lesson: 1,
-    title: 'Сэдэв 1',
-  },
-  {
-    id: '2',
-    lesson: 2,
-    title: 'Сэдэв 2',
-  },
-  {
-    id: '3',
-    lesson: 3,
-    title: 'Сэдэв 3',
-  },
-  {
-    id: '4',
-    lesson: 4,
-    title: 'Сэдэв 4',
-  },
-  {
-    id: '5',
-    lesson: 5,
-    title: 'Сэдэв 5',
-  },
-  {
-    id: '6',
-    lesson: 6,
-    title: 'Сэдэв 6',
-  },
-  {
-    id: '7',
-    lesson: 7,
-    title: 'Сэдэв 7',
-  },
-  {
-    id: '8',
-    lesson: 8,
-    title: 'Сэдэв 8',
-  },
-];
+import WordType from '@/components/WordType';
 
 export default function TabOneScreen(): React.ReactNode {
   const router = useRouter();
+  const { data, error, loading } = useQuery(GET_ALL_VOCABULARIES);
+
+  if (loading) return <Text>Loading...</Text>;
+  if (error) return <Text>Error :</Text>;
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={lessons}
+        data={data.getAllVocabularies}
         ListHeaderComponent={() => (
           <View>
             <View style={styles.userView}>
@@ -81,7 +45,7 @@ export default function TabOneScreen(): React.ReactNode {
                 params: { id: item.id },
               });
             }}>
-            <WordType lesson={item.lesson} title={item.title} />
+            <WordType title={item.title} />
           </TouchableOpacity>
         )}
         keyExtractor={(item) => item.id.toString()}

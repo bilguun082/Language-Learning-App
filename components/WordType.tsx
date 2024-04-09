@@ -3,17 +3,16 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 export default function WordType({
-  lesson,
   title,
+  isSaved,
 }: {
-  lesson: number;
   title: string;
+  isSaved: boolean;
 }): React.ReactNode {
   return (
     <View style={{ ...styles.container, ...styles.shadowProp }}>
       <Feather name="file-text" size={24} color="black" />
       <Text>{title}</Text>
-      {/* <BookIcon /> */}
     </View>
   );
 }

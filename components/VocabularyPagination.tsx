@@ -5,18 +5,19 @@ type PaginationProps = {
   data: {
     id: string;
     title: string;
-    isSaved: boolean;
-    facts: Fact[][];
+    words: Word[][];
   };
   scrollX: Animated.Value;
   index: number;
 };
 
-type Fact = {
+type Word = {
   id: string;
   image: string;
-  fact: string;
+  word: string;
+  translation: string;
   exampleSentence: string;
+  isSaved: boolean;
 };
 
 const { width } = Dimensions.get('screen');
@@ -24,7 +25,7 @@ const { width } = Dimensions.get('screen');
 const Pagination: React.FC<PaginationProps> = ({ data, scrollX, index }) => {
   return (
     <View style={styles.container}>
-      {data?.facts.map((_, idx) => {
+      {data?.words?.map((_, idx) => {
         const inputRange = [(idx - 1) * width, idx * width, (idx + 1) * width];
 
         const dotWidth = scrollX.interpolate({
