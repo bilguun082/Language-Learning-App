@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { useGlobalSearchParams } from 'expo-router';
+import { useGlobalSearchParams, useRouter, useFocusEffect } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Button } from 'react-native';
 
@@ -79,7 +79,6 @@ const ChooseType: React.FC<{
   onNext: () => void;
 }> = ({ task, setSentence, sentence, onNext }) => {
   const [words, setWords] = useState<string[]>(task.words);
-
   const handleWordSelect = (word: string): void => {
     setSentence([...sentence, word]);
     setWords((prevWords) => prevWords.filter((w) => w !== word));
@@ -165,41 +164,23 @@ const TestType: React.FC<{
 
 const Page: React.FC = () => {
   const { title }: { title: string } = useGlobalSearchParams();
-  const { data, error, loading } = useQuery(GET_LESSON_TEST, {
+  const { data, error, loading, refetch } = useQuery(GET_LESSON_TEST, {
     variables: {
       title,
     },
   });
+
+  useFocusEffect(() => {
+    refetch();
+  });
+
+  const router = useRouter();
 
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [selectedWord, setSelectedWord] = useState<string | null>(null);
   const [sentence, setSentence] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [score, setScore] = useState(0);
-  const handleNext = (): void => {
-    HandleScore();
-    if (currentTaskIndex < data?.getLessonTest.selectionTests.length - 1) {
-      setCurrentTaskIndex(currentTaskIndex + 1);
-    } else {
-      setShowModal(true);
-    }
-  };
-  const task = data?.getLessonTest.selectionTests[currentTaskIndex];
-
-  const HandleScore = (): void => {
-    if (task[currentTaskIndex]?.type === 'choose') {
-      const answer = task[currentTaskIndex].correctForm;
-      const userSentence = sentence.join(' ');
-      if (userSentence === answer) {
-        setScore((prev) => prev + 1);
-      }
-    } else if (task[currentTaskIndex]?.type === 'test') {
-      const answer = task[currentTaskIndex].correctForm;
-      if (selectedWord === answer) {
-        setScore((prev) => prev + 1);
-      }
-    }
-  };
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -209,9 +190,42 @@ const Page: React.FC = () => {
     return <Text>Error fetching data</Text>;
   }
 
+  // eslint-disable-next-line no-extra-boolean-cast
+  if (!Boolean(data)) {
+    return <Text>Loading...</Text>;
+  }
+
+  const handleNext = (): void => {
+    HandleScore();
+    if (currentTaskIndex < data?.getLessonTest?.selectionTests.length - 1) {
+      setSelectedWord(null);
+      setSentence([]);
+
+      setCurrentTaskIndex(currentTaskIndex + 1);
+    } else {
+      setShowModal(true);
+    }
+  };
+  const task = data?.getLessonTest?.selectionTests[currentTaskIndex];
+
+  const HandleScore = (): void => {
+    if (task?.type === 'choose') {
+      const answer = task.correctForm;
+      const userSentence = sentence.join(' ');
+      if (userSentence === answer) {
+        setScore((prev) => prev + 1);
+      }
+    } else if (task?.type === 'test') {
+      const answer = task.correctForm;
+      if (selectedWord === answer) {
+        setScore((prev) => prev + 1);
+      }
+    }
+  };
+
   return (
     <View style={styles.container}>
-      {task.type === 'test' && (
+      {task?.type === 'test' && (
         <TestType
           task={task}
           onNext={handleNext}
@@ -219,19 +233,25 @@ const Page: React.FC = () => {
           selectedWord={selectedWord}
         />
       )}
-      {task.type === 'choose' && (
+      {task?.type === 'choose' && (
         <ChooseType task={task} onNext={handleNext} setSentence={setSentence} sentence={sentence} />
       )}
       <Modal visible={showModal} animationType="slide" transparent>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text>Your Grade: {score}%</Text>
-            {data?.getLessonTest.selectionTests.map((task: SelectionTests, index: number) => (
+            {data?.getLessonTest?.selectionTests.map((task: SelectionTests, index: number) => (
               <Text key={index}>
-                {task.sentence}: {task.correctForm}
+                {index + 1}: {task.correctForm}
               </Text>
             ))}
-            <Button title="Close" onPress={() => setShowModal(false)} />
+            <Button
+              title="done"
+              onPress={() => {
+                setShowModal(false);
+                router.push('/(tabs)/');
+              }}
+            />
           </View>
         </View>
       </Modal>

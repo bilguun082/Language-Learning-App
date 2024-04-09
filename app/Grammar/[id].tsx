@@ -20,7 +20,6 @@ export default function Page(): React.ReactNode {
       getLessonId: id,
     },
   });
-  console.log(data);
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error :</Text>;

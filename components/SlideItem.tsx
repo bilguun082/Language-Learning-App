@@ -16,7 +16,6 @@ interface SlideItemProps {
 
 const SlideItem: React.FC<SlideItemProps> = ({ item }) => {
   const router = useRouter();
-  console.log(item);
 
   return (
     <View style={styles.container}>

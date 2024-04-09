@@ -35,7 +35,6 @@ export default function SignInScreen(): React.ReactNode {
         throw new Error('signIn is null or undefined');
       }
 
-      console.log(result);
       alert('Password reset successfully');
 
       // Set the user session active, which will log in the user automatically
