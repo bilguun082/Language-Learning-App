@@ -10,8 +10,6 @@ export default function TabOneScreen(): React.ReactNode {
   const router = useRouter();
   const { data, error, loading } = useQuery(GET_ALL_VOCABULARIES);
 
-  console.log(data);
-
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error :</Text>;
 

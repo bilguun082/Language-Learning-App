@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { useGlobalSearchParams } from 'expo-router';
+import { useGlobalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Button } from 'react-native';
 
@@ -62,16 +62,26 @@ const styles = StyleSheet.create({
 
 const Page: React.FC = () => {
   const { title }: { title: string } = useGlobalSearchParams();
+  const router = useRouter();
   const { data, error, loading } = useQuery(GET_VOCABULARY_TEST, {
     variables: {
       title,
     },
   });
+  // const [updateVocabulary, { data: updateVocabularyData }] = useMutation(UPDATE_VOCABULARY);
 
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
   const [selectedWord, setSelectedWord] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
+
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+
+  if (error) {
+    return <Text>Error fetching data</Text>;
+  }
 
   const handleAnswerSelect = (word: string): void => {
     const currentTask = data?.getVocabularyTest.vocabularySelectionTests[currentTaskIndex];
@@ -108,6 +118,7 @@ const Page: React.FC = () => {
 
   const closeModal = (): void => {
     setShowModal(false);
+    router.push('/(tabs)/');
   };
 
   const renderQuizTask = (): JSX.Element => {
@@ -154,14 +165,6 @@ const Page: React.FC = () => {
       </Modal>
     );
   };
-
-  if (loading) {
-    return <Text>Loading...</Text>;
-  }
-
-  if (error) {
-    return <Text>Error fetching data</Text>;
-  }
 
   return (
     <View>

@@ -10,6 +10,7 @@ import { REGISTER_USER } from '../graphql/user';
 export default function SignUpScreen(): React.ReactNode {
   const { isLoaded, signUp, setActive } = useSignUp();
   const [registerUser, { data }] = useMutation(REGISTER_USER);
+  console.log(data);
   const router = useRouter();
   const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');
@@ -40,8 +41,6 @@ export default function SignUpScreen(): React.ReactNode {
         },
       });
 
-      console.log(data);
-
       // Send verification Email
       await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
 
@@ -66,8 +65,8 @@ export default function SignUpScreen(): React.ReactNode {
       });
 
       const data = await setActive({ session: completeSignUp.createdSessionId });
-
       console.log(data);
+
       router.push('/(tabs)');
     } catch (err) {
       alert(err);

@@ -9,7 +9,6 @@ export default function WordType({
   title: string;
   isSaved: boolean;
 }): React.ReactNode {
-  console.log(isSaved);
   return (
     <View style={{ ...styles.container, ...styles.shadowProp }}>
       <Feather name="file-text" size={24} color="black" />

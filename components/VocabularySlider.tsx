@@ -44,7 +44,6 @@ const Slider: React.FC<SliderProps> = ({ data }: SliderProps) => {
 
   const handleOnViewableItemsChanged = useRef(
     ({ viewableItems }: { viewableItems: { index: number }[] }) => {
-      // console.log('viewableItems', viewableItems);
       setIndex(viewableItems[0].index);
     },
   ).current;

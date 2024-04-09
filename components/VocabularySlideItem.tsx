@@ -19,7 +19,6 @@ interface SlideItemProps {
 
 const SlideItem: React.FC<SlideItemProps> = ({ item }) => {
   const router = useRouter();
-  console.log(item.title);
   return (
     <View style={styles.container}>
       <Image source={{ uri: item.image }} width={300} height={240} />

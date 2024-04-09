@@ -31,10 +31,12 @@ export const GET_VOCABULARY = gql`
 `;
 
 export const UPDATE_VOCABULARY = gql`
-  mutation Mutation($updateVocabularyId: String!, $input: VocabularyUpdateInput!) {
+  mutation UpdateVocabulary($updateVocabularyId: String!, $input: VocabularyUpdateInput!) {
     updateVocabulary(id: $updateVocabularyId, input: $input) {
+      id
       isDone
       isStarted
+      title
     }
   }
 `;
