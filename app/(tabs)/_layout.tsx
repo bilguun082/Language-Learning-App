@@ -20,6 +20,14 @@ const TabLayout: React.FC = () => {
           tabBarIcon: ({ color }) => <Ionicons name="newspaper-outline" size={28} color={color} />,
         }}
       />
+      <Tabs.Screen
+        name="three"
+        options={{
+          title: '',
+          headerShown: false,
+          tabBarIcon: ({ color }) => <Ionicons name="newspaper-outline" size={28} color={color} />,
+        }}
+      />
     </Tabs>
   );
 };

@@ -6,7 +6,7 @@ import { GET_ALL_VOCABULARIES } from '../graphql/vocabulary';
 
 import WordType from '@/components/WordType';
 
-export default function TabOneScreen(): React.ReactNode {
+export default function TabTwoScreen(): React.ReactNode {
   const router = useRouter();
   const { data, error, loading } = useQuery(GET_ALL_VOCABULARIES);
 
