@@ -1,7 +1,15 @@
 import { useQuery } from '@apollo/client';
 import { useGlobalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Button } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+  Button,
+  TouchableWithoutFeedback,
+} from 'react-native';
 
 import { GET_VOCABULARY_TEST } from '../graphql/vocabularyTest';
 
@@ -20,6 +28,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
+    backgroundColor: '#fff',
   },
   question: {
     fontSize: 20,
@@ -29,22 +38,43 @@ const styles = StyleSheet.create({
   word: {
     padding: 10,
     margin: 5,
+    width: 130,
     borderWidth: 1,
-    borderRadius: 5,
-    backgroundColor: '#f0f0f0',
+    borderRadius: 30,
+    backgroundColor: 'white',
   },
   selectedWord: {
-    backgroundColor: '#ccc',
+    backgroundColor: '#5E5DF0',
   },
   button: {
     padding: 10,
-    backgroundColor: 'blue',
-    borderRadius: 5,
+    width: 100,
+    height: 40,
+    backgroundColor: '#5E5DF0',
+    shadowColor: '#5E5DF0',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.5,
+    shadowRadius: 20,
+    borderRadius: 20,
     marginVertical: 10,
   },
   buttonText: {
+    color: 'black',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 15,
+  },
+  Text: {
+    color: 'black',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  selectedText: {
     color: 'white',
     textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 15,
   },
   modalContainer: {
     flex: 1,
@@ -53,10 +83,22 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    backgroundColor: 'white',
-    padding: 20,
+    backgroundColor: '#fff',
     borderRadius: 10,
+    padding: 20,
+    width: '80%',
+    height: 200,
+    gap: 20,
     alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
 
@@ -68,7 +110,6 @@ const Page: React.FC = () => {
       title,
     },
   });
-  // const [updateVocabulary, { data: updateVocabularyData }] = useMutation(UPDATE_VOCABULARY);
 
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
@@ -89,17 +130,15 @@ const Page: React.FC = () => {
       setUserAnswers([...userAnswers, word]);
     }
     setSelectedWord(word);
-    setTimeout(() => {
-      handleNext();
-    }, 500);
   };
-
   const handleNext = (): void => {
-    if (currentTaskIndex < data?.getVocabularyTest.vocabularySelectionTests.length - 1) {
-      setSelectedWord(null);
-      setCurrentTaskIndex(currentTaskIndex + 1);
-    } else {
-      setShowModal(true);
+    if (selectedWord !== '') {
+      if (currentTaskIndex < data?.getVocabularyTest.vocabularySelectionTests.length - 1) {
+        setSelectedWord('');
+        setCurrentTaskIndex(currentTaskIndex + 1);
+      } else {
+        setShowModal(true);
+      }
     }
   };
 
@@ -121,34 +160,49 @@ const Page: React.FC = () => {
     router.push('/(tabs)/');
   };
 
+  const handleScreenTap = (): void => {
+    setSelectedWord(null);
+  };
   const renderQuizTask = (): JSX.Element => {
     const task = data?.getVocabularyTest.vocabularySelectionTests[currentTaskIndex];
     const { question, words } = task;
     return (
-      <View style={styles.container}>
-        <Text style={styles.question}>{question}</Text>
-        <View style={{ flexDirection: 'column', flexWrap: 'wrap' }}>
-          {words.map((word: string) => (
-            <TouchableOpacity
-              key={word}
-              style={[styles.word, word === selectedWord && styles.selectedWord]}
-              onPress={() => handleAnswerSelect(word)}
-              disabled={selectedWord !== null}>
-              <Text>{word}</Text>
-            </TouchableOpacity>
-          ))}
+      <TouchableWithoutFeedback onPress={handleScreenTap}>
+        <View style={styles.container}>
+          <Text style={styles.question}>{question}</Text>
+          <View style={{ flexDirection: 'column', flexWrap: 'wrap' }}>
+            {words.map((word: string) => (
+              <TouchableOpacity
+                key={word}
+                style={[styles.word, word === selectedWord && styles.selectedWord]}
+                onPress={() => handleAnswerSelect(word)}
+                disabled={selectedWord !== null}>
+                <Text style={selectedWord === word ? styles.selectedText : styles.buttonText}>
+                  {word}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          <TouchableOpacity
+            style={[styles.button]}
+            onPress={handleNext}
+            disabled={selectedWord === null}>
+            <Text style={styles.selectedText}>
+              {currentTaskIndex === data?.getVocabularyTest.vocabularySelectionTests.length - 1
+                ? 'Done'
+                : 'Next'}
+            </Text>
+          </TouchableOpacity>
+          <Modal visible={showModal} animationType="slide" transparent>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <Text style={styles.selectedText}>Your Grade: {calculateGrade().toFixed(2)}%</Text>
+                <Button title="Close" onPress={closeModal} />
+              </View>
+            </View>
+          </Modal>
         </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleNext}
-          disabled={selectedWord === null}>
-          <Text style={styles.buttonText}>
-            {currentTaskIndex === data.getVocabularyTest.vocabularySelectionTests.length - 1
-              ? 'Done'
-              : 'Next'}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      </TouchableWithoutFeedback>
     );
   };
 
@@ -158,8 +212,11 @@ const Page: React.FC = () => {
       <Modal visible={showModal} animationType="slide" transparent>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text>Your Grade: {grade.toFixed(2)}%</Text>
-            <Button title="Close" onPress={closeModal} />
+            <Text style={styles.Text}>Таны дүн: {grade.toFixed(2)}%</Text>
+            {/* <Button title="Close" onPress={closeModal} /> */}
+            <TouchableOpacity style={styles.button} onPress={closeModal}>
+              <Text style={styles.selectedText}>Хаах</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>

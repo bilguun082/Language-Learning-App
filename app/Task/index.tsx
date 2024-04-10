@@ -16,6 +16,7 @@ interface SelectionTests {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#fff',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -31,14 +32,25 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 20,
     marginTop: 20,
+    marginRight: 20,
   },
   wordButtonText: {
     color: 'black',
     fontWeight: 'bold',
     marginRight: 10,
   },
+  OnPressText: {
+    color: 'white',
+    fontWeight: 'bold',
+    marginRight: 10,
+  },
   selectedWord: {
-    backgroundColor: '#ccc',
+    backgroundColor: '#5E5DF0',
+    color: 'white',
+  },
+  sentenceText: {
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   button: {
     padding: 10,
@@ -144,14 +156,16 @@ const TestType: React.FC<{
 
   return (
     <View style={styles.container}>
-      <Text>{task.sentence}</Text>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+      <Text style={styles.sentenceText}>{task.sentence}</Text>
+      <View style={{ flexDirection: 'column', flexWrap: 'wrap', justifyContent: 'center' }}>
         {task.words.map((word: string, index: number) => (
           <TouchableOpacity
             key={index}
             onPress={() => handleAnswerSelect(word)}
             style={[styles.wordButton, selectedWord === word && styles.selectedWord]}>
-            <Text style={styles.wordButtonText}>{word}</Text>
+            <Text style={selectedWord === word ? styles.OnPressText : styles.wordButtonText}>
+              {word}
+            </Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -180,7 +194,7 @@ const Page: React.FC = () => {
   const [selectedWord, setSelectedWord] = useState<string | null>(null);
   const [sentence, setSentence] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const [score, setScore] = useState(0);
+  // const [score, setScore] = useState(0);
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -213,12 +227,14 @@ const Page: React.FC = () => {
       const answer = task.correctForm;
       const userSentence = sentence.join(' ');
       if (userSentence === answer) {
-        setScore((prev) => prev + 1);
+        // setScore((prev) => prev + 1);
+        console.log('right');
       }
     } else if (task?.type === 'test') {
       const answer = task.correctForm;
       if (selectedWord === answer) {
-        setScore((prev) => prev + 1);
+        // setScore((prev) => prev + 1);
+        console.log('right');
       }
     }
   };
@@ -239,7 +255,7 @@ const Page: React.FC = () => {
       <Modal visible={showModal} animationType="slide" transparent>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text>Your Grade: {score}%</Text>
+            <Text>Зөв хариунууд:</Text>
             {data?.getLessonTest?.selectionTests.map((task: SelectionTests, index: number) => (
               <Text key={index}>
                 {index + 1}: {task.correctForm}

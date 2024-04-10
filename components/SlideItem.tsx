@@ -19,7 +19,7 @@ const SlideItem: React.FC<SlideItemProps> = ({ item }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Хичээл</Text>
+      <Text style={styles.title}>{item.title}</Text>
       <View style={styles.content}>
         <Image
           source={{
@@ -29,6 +29,7 @@ const SlideItem: React.FC<SlideItemProps> = ({ item }) => {
           height={200}
         />
         <Text style={styles.description}>{item.fact}</Text>
+        <Text style={styles.description}>Жишээ өгүүлбэр:</Text>
         <Text style={styles.description}>{item.exampleSentence}</Text>
         {item.isLast && (
           <TouchableOpacity

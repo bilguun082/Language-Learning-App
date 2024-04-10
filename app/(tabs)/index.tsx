@@ -1,7 +1,6 @@
 import { useQuery } from '@apollo/client';
-import { useUser } from '@clerk/clerk-expo';
 import { useRouter } from 'expo-router';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { GET_ALL_LESSONS } from '../graphql/lesson';
 
@@ -11,7 +10,6 @@ export default function TabOneScreen(): React.ReactNode {
   const { data, error, loading } = useQuery(GET_ALL_LESSONS);
   // const [data,setData ] = useState()
   const router = useRouter();
-  const { user } = useUser();
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error :</Text>;
@@ -23,10 +21,25 @@ export default function TabOneScreen(): React.ReactNode {
         ListHeaderComponent={() => (
           <View>
             <View style={styles.userView}>
+              <TouchableOpacity
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}
+                onPress={() => {
+                  router.push({
+                    pathname: '/(tabs)/three',
+                  });
+                }}>
+                <Image
+                  source={{
+                    uri: 'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg',
+                  }}
+                  width={50}
+                  height={50}
+                  style={{ borderRadius: 50 }}
+                />
+              </TouchableOpacity>
               <View>
-                <Text style={styles.header}>Сайн уу {user?.username},</Text>
-
-                <Text style={styles.title}>Continue to English!</Text>
+                <Text style={styles.title}>Эргэн тавтай морил😇</Text>
+                {/* <Text style={styles.title}>Хичээл</Text> */}
               </View>
             </View>
             <Text
@@ -37,7 +50,7 @@ export default function TabOneScreen(): React.ReactNode {
                 marginBottom: 20,
                 marginTop: 20,
               }}>
-              Таны хичээлүүд
+              Хичээлүүд
             </Text>
           </View>
         )}
@@ -65,13 +78,15 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     margin: 0,
     padding: 0,
+    backgroundColor: '#fff',
   },
   userView: {
     flexDirection: 'column',
     width: '100%',
     height: 250,
     backgroundColor: '#c77dff',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
+    paddingTop: 50,
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
     paddingBottom: 40,
@@ -79,7 +94,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    fontSize: 30,
+    fontSize: 23,
     fontWeight: 'bold',
     color: '#fff',
   },

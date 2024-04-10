@@ -1,25 +1,33 @@
+import { useUser } from '@clerk/clerk-expo';
 import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
 
 export default function TabThreeScreen(): React.ReactNode {
-  const user = {
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    avatar:
-      'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg',
-    bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut libero nec elit ultrices elementum.',
-  };
+  // const user = {
+  //   name: 'John Doe',
+  //   email: 'john.doe@example.com',
+  //   avatar:
+  //     'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg',
+  //   bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut libero nec elit ultrices elementum.',
+  // };
+
+  const { user } = useUser();
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header}>
-        <Image src={user.avatar} style={styles.avatar} />
-        <Text style={styles.name}>{user.name}</Text>
-        <Text style={styles.email}>{user.email}</Text>
+        <Image
+          source={{
+            uri: 'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg',
+          }}
+          style={styles.avatar}
+        />
+        <Text style={styles.name}>{user?.username}</Text>
+        {/* <Text style={styles.email}>{user.}</Text> */}
       </View>
-      <View style={styles.bioContainer}>
+      {/* <View style={styles.bioContainer}>
         <Text style={styles.bio}>{user.bio}</Text>
-      </View>
+      </View> */}
     </ScrollView>
   );
 }

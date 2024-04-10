@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'expo-router';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { GET_ALL_VOCABULARIES } from '../graphql/vocabulary';
 
@@ -20,8 +20,25 @@ export default function TabTwoScreen(): React.ReactNode {
         ListHeaderComponent={() => (
           <View>
             <View style={styles.userView}>
+              <TouchableOpacity
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}
+                onPress={() => {
+                  router.push({
+                    pathname: '/(tabs)/three',
+                  });
+                }}>
+                <Image
+                  source={{
+                    uri: 'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg',
+                  }}
+                  width={50}
+                  height={50}
+                  style={{ borderRadius: 50 }}
+                />
+              </TouchableOpacity>
               <View>
-                <Text style={styles.title}>Үгийн сан</Text>
+                <Text style={styles.title}>Үгийн санг чинь сайжруулъя😎</Text>
+                {/* <Text style={styles.title}>Хичээл</Text> */}
               </View>
             </View>
             <Text
@@ -32,7 +49,7 @@ export default function TabTwoScreen(): React.ReactNode {
                 marginBottom: 20,
                 marginTop: 20,
               }}>
-              Таны сэдвүүд
+              Сэдвүүд
             </Text>
           </View>
         )}
@@ -60,13 +77,15 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     margin: 0,
     padding: 0,
+    backgroundColor: '#fff',
   },
   userView: {
     flexDirection: 'column',
     width: '100%',
     height: 250,
     backgroundColor: '#c77dff',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
+    paddingTop: 60,
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
     paddingBottom: 40,
@@ -74,7 +93,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    fontSize: 30,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#fff',
   },
