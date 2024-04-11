@@ -25,6 +25,14 @@ export default function SignUpScreen(): React.ReactNode {
     setLoading(true);
 
     try {
+      // Check if username contains uppercase letters
+      if (/[A-Z]/.test(username)) {
+        alert('Username cannot contain uppercase letters');
+        setUsername('');
+        setLoading(false);
+        return;
+      }
+
       // Create the user on Clerk
       await signUp.create({
         username,

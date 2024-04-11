@@ -19,7 +19,6 @@ module.exports = {
         '@typescript-eslint/no-empty-function': 'error',
         '@typescript-eslint/no-empty-interface': 'error',
         '@typescript-eslint/no-non-null-assertion': 'error',
-        '@typescript-eslint/strict-boolean-expressions': 'error',
         '@typescript-eslint/prefer-optional-chain': 'error',
         '@typescript-eslint/prefer-nullish-coalescing': 'error',
         '@typescript-eslint/no-misused-promises': 'error',

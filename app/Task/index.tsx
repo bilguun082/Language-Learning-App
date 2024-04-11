@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { useGlobalSearchParams, useRouter, useFocusEffect } from 'expo-router';
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, Button } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 
 import { GET_LESSON_TEST } from '../graphql/lessonTest';
 
@@ -25,17 +25,62 @@ const styles = StyleSheet.create({
   wordButton: {
     padding: 10,
     backgroundColor: 'white',
-    borderRadius: 999,
+    borderRadius: 10,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#5E5DF0',
     shadowColor: '#5E5DF0',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.5,
-    shadowRadius: 20,
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
     marginTop: 20,
     marginRight: 20,
   },
+  sentenceWord: {
+    padding: 10,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+    shadowColor: '#5E5DF0',
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    marginTop: 20,
+    marginRight: 20,
+  },
+  textButton: {
+    padding: 10,
+    margin: 5,
+    width: 250,
+    height: 70,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#5E5DF0',
+    borderRadius: 30,
+    backgroundColor: 'white',
+    shadowColor: '#5E5DF0',
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+  },
+  sentenceContainer: {
+    width: '90%',
+    height: 200,
+    padding: 10,
+    borderColor: 'black',
+    borderWidth: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    borderRadius: 30,
+  },
   wordButtonText: {
     color: 'black',
+    fontWeight: 'bold',
+    marginRight: 10,
+  },
+  modalButtonText: {
+    color: 'white',
     fontWeight: 'bold',
     marginRight: 10,
   },
@@ -54,15 +99,17 @@ const styles = StyleSheet.create({
   },
   button: {
     padding: 10,
+    width: 250,
+    height: 60,
     backgroundColor: '#5E5DF0',
-    borderRadius: 999,
-    width: 100,
-    alignItems: 'center',
     shadowColor: '#5E5DF0',
+    alignItems: 'center',
+    justifyContent: 'center',
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.5,
     shadowRadius: 20,
-    marginTop: 20,
+    borderRadius: 20,
+    marginVertical: 10,
   },
   buttonText: {
     fontSize: 16,
@@ -81,10 +128,11 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     alignItems: 'center',
+    gap: 15,
   },
 });
 
-const ChooseType: React.FC<{
+const TestType: React.FC<{
   task: SelectionTests;
   setSentence: React.Dispatch<React.SetStateAction<string[]>>;
   sentence: string[];
@@ -112,11 +160,16 @@ const ChooseType: React.FC<{
   return (
     <View style={styles.container}>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
-        {sentence.map((word, index) => (
-          <TouchableOpacity onPress={() => handleRemoveWord(word)} key={index}>
-            <Text style={styles.wordButtonText}>{word}</Text>
-          </TouchableOpacity>
-        ))}
+        <View style={styles.sentenceContainer}>
+          {sentence.map((word, index) => (
+            <TouchableOpacity
+              onPress={() => handleRemoveWord(word)}
+              style={styles.sentenceWord}
+              key={index}>
+              <Text style={styles.wordButtonText}>{word}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
       <View
         style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', marginTop: 20 }}>
@@ -136,7 +189,7 @@ const ChooseType: React.FC<{
   );
 };
 
-const TestType: React.FC<{
+const ChooseType: React.FC<{
   task: SelectionTests;
   onNext: () => void;
   setSelectedWord: React.Dispatch<React.SetStateAction<string | null>>;
@@ -144,7 +197,6 @@ const TestType: React.FC<{
 }> = ({ task, onNext, setSelectedWord, selectedWord }) => {
   const handleAnswerSelect = (word: string): void => {
     setSelectedWord(word);
-    // onNext();
   };
   const handleNext = (): void => {
     if (selectedWord === null) {
@@ -162,7 +214,7 @@ const TestType: React.FC<{
           <TouchableOpacity
             key={index}
             onPress={() => handleAnswerSelect(word)}
-            style={[styles.wordButton, selectedWord === word && styles.selectedWord]}>
+            style={[styles.textButton, selectedWord === word && styles.selectedWord]}>
             <Text style={selectedWord === word ? styles.OnPressText : styles.wordButtonText}>
               {word}
             </Text>
@@ -194,7 +246,7 @@ const Page: React.FC = () => {
   const [selectedWord, setSelectedWord] = useState<string | null>(null);
   const [sentence, setSentence] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
-  // const [score, setScore] = useState(0);
+  const [score, setScore] = useState(0);
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -221,28 +273,36 @@ const Page: React.FC = () => {
     }
   };
   const task = data?.getLessonTest?.selectionTests[currentTaskIndex];
+  const length = data?.getLessonTest?.selectionTests.length;
 
   const HandleScore = (): void => {
     if (task?.type === 'choose') {
       const answer = task.correctForm;
       const userSentence = sentence.join(' ');
       if (userSentence === answer) {
-        // setScore((prev) => prev + 1);
-        console.log('right');
+        setScore((prev) => prev + 1);
       }
     } else if (task?.type === 'test') {
       const answer = task.correctForm;
+      console.log(answer);
       if (selectedWord === answer) {
-        // setScore((prev) => prev + 1);
-        console.log('right');
+        setScore((prev) => prev + 1);
       }
     }
+  };
+
+  const handleRestart = (): void => {
+    setCurrentTaskIndex(0);
+    setSelectedWord(null);
+    setSentence([]);
+    setScore(0);
+    setShowModal(false);
   };
 
   return (
     <View style={styles.container}>
       {task?.type === 'test' && (
-        <TestType
+        <ChooseType
           task={task}
           onNext={handleNext}
           setSelectedWord={setSelectedWord}
@@ -250,24 +310,29 @@ const Page: React.FC = () => {
         />
       )}
       {task?.type === 'choose' && (
-        <ChooseType task={task} onNext={handleNext} setSentence={setSentence} sentence={sentence} />
+        <TestType task={task} onNext={handleNext} setSentence={setSentence} sentence={sentence} />
       )}
       <Modal visible={showModal} animationType="slide" transparent>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text>Зөв хариунууд:</Text>
-            {data?.getLessonTest?.selectionTests.map((task: SelectionTests, index: number) => (
-              <Text key={index}>
-                {index + 1}: {task.correctForm}
-              </Text>
-            ))}
-            <Button
-              title="done"
+            <Text style={styles.wordButtonText}>
+              Зөв хариунууд:{score}/{length}
+            </Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                handleRestart();
+              }}>
+              <Text style={styles.modalButtonText}>Дахин эхлэх</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
               onPress={() => {
                 setShowModal(false);
                 router.push('/(tabs)/');
-              }}
-            />
+              }}>
+              <Text style={styles.modalButtonText}>Хаах</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>

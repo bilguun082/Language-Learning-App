@@ -1,6 +1,14 @@
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'expo-router';
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import { GET_ALL_VOCABULARIES } from '../graphql/vocabulary';
 
@@ -10,7 +18,7 @@ export default function TabTwoScreen(): React.ReactNode {
   const router = useRouter();
   const { data, error, loading } = useQuery(GET_ALL_VOCABULARIES);
 
-  if (loading) return <Text>Loading...</Text>;
+  if (loading) return <ActivityIndicator size="large" />;
   if (error) return <Text>Error :</Text>;
 
   return (
@@ -77,7 +85,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     margin: 0,
     padding: 0,
-    backgroundColor: '#fff',
+    backgroundColor: '#0000',
   },
   userView: {
     flexDirection: 'column',

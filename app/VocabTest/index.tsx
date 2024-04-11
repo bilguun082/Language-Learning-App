@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { useGlobalSearchParams, useRouter } from 'expo-router';
+import { useFocusEffect, useGlobalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
   View,
@@ -38,20 +38,30 @@ const styles = StyleSheet.create({
   word: {
     padding: 10,
     margin: 5,
-    width: 130,
+    width: 250,
+    height: 70,
+    alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 1,
+    borderColor: '#5E5DF0',
     borderRadius: 30,
     backgroundColor: 'white',
+    shadowColor: '#5E5DF0',
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
   },
   selectedWord: {
     backgroundColor: '#5E5DF0',
   },
   button: {
     padding: 10,
-    width: 100,
-    height: 40,
+    width: 250,
+    height: 60,
     backgroundColor: '#5E5DF0',
     shadowColor: '#5E5DF0',
+    alignItems: 'center',
+    justifyContent: 'center',
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.5,
     shadowRadius: 20,
@@ -86,8 +96,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 20,
-    width: '80%',
-    height: 200,
+    width: '90%',
+    height: 300,
     gap: 20,
     alignItems: 'center',
     justifyContent: 'center',
@@ -105,7 +115,7 @@ const styles = StyleSheet.create({
 const Page: React.FC = () => {
   const { title }: { title: string } = useGlobalSearchParams();
   const router = useRouter();
-  const { data, error, loading } = useQuery(GET_VOCABULARY_TEST, {
+  const { data, error, loading, refetch } = useQuery(GET_VOCABULARY_TEST, {
     variables: {
       title,
     },
@@ -116,7 +126,11 @@ const Page: React.FC = () => {
   const [selectedWord, setSelectedWord] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
 
-  if (loading) {
+  useFocusEffect(() => {
+    refetch();
+  });
+
+  if (loading || !data?.getVocabularyTest) {
     return <Text>Loading...</Text>;
   }
 
@@ -152,7 +166,7 @@ const Page: React.FC = () => {
       }
       return grade;
     }, 0);
-    return (userGrade / correctAnswers.length) * 100;
+    return userGrade;
   };
 
   const closeModal = (): void => {
@@ -160,15 +174,26 @@ const Page: React.FC = () => {
     router.push('/(tabs)/');
   };
 
+  const restart = (): void => {
+    setCurrentTaskIndex(0);
+    setSelectedWord(null);
+    setUserAnswers([]);
+    setShowModal(false);
+  };
+
   const handleScreenTap = (): void => {
     setSelectedWord(null);
   };
   const renderQuizTask = (): JSX.Element => {
     const task = data?.getVocabularyTest.vocabularySelectionTests[currentTaskIndex];
+    const length = data?.getVocabularyTest.vocabularySelectionTests.length;
     const { question, words } = task;
     return (
       <TouchableWithoutFeedback onPress={handleScreenTap}>
         <View style={styles.container}>
+          <Text style={styles.question}>
+            {currentTaskIndex}\{length}
+          </Text>
           <Text style={styles.question}>{question}</Text>
           <View style={{ flexDirection: 'column', flexWrap: 'wrap' }}>
             {words.map((word: string) => (
@@ -212,8 +237,12 @@ const Page: React.FC = () => {
       <Modal visible={showModal} animationType="slide" transparent>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.Text}>Таны дүн: {grade.toFixed(2)}%</Text>
-            {/* <Button title="Close" onPress={closeModal} /> */}
+            <Text style={styles.Text}>
+              Зөв хариу: {grade}/{data?.getVocabularyTest.vocabularySelectionTests.length}
+            </Text>
+            <TouchableOpacity style={styles.button} onPress={restart}>
+              <Text style={styles.selectedText}>Дахин эхлэх</Text>
+            </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={closeModal}>
               <Text style={styles.selectedText}>Хаах</Text>
             </TouchableOpacity>

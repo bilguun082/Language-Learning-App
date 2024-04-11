@@ -25,8 +25,9 @@ const SlideItem: React.FC<SlideItemProps> = ({ item }) => {
           source={{
             uri: item.image,
           }}
-          width={300}
-          height={200}
+          width={350}
+          height={250}
+          style={{ borderRadius: 20, opacity: 3 }}
         />
         <Text style={styles.description}>{item.fact}</Text>
         <Text style={styles.description}>Жишээ өгүүлбэр:</Text>

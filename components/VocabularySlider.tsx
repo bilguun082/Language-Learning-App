@@ -52,6 +52,9 @@ const Slider: React.FC<SliderProps> = ({ data }: SliderProps) => {
     itemVisiblePercentThreshold: 50,
   }).current;
 
+  if (!data) return null;
+  if (!data.words) return null;
+
   return (
     <View>
       <FlatList

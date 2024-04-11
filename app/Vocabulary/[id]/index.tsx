@@ -15,7 +15,7 @@ export default function Page(): React.ReactNode {
     },
   });
 
-  if (loading) return <Text>Loading...</Text>;
+  if (loading || !data) return <Text>Loading...</Text>;
   if (error) return <Text>Error :</Text>;
 
   return (
@@ -23,7 +23,7 @@ export default function Page(): React.ReactNode {
       style={{
         paddingTop: 60,
       }}>
-      <Slider data={data.getVocabulary} />
+      <Slider data={data?.getVocabulary} />
     </View>
   );
 }

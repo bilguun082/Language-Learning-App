@@ -1,20 +1,40 @@
-import { useUser } from '@clerk/clerk-expo';
+import { useQuery } from '@apollo/client';
+import { useAuth, useUser } from '@clerk/clerk-expo';
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
+
+import { GET_USER } from '../graphql/user';
 
 export default function TabThreeScreen(): React.ReactNode {
-  // const user = {
-  //   name: 'John Doe',
-  //   email: 'john.doe@example.com',
-  //   avatar:
-  //     'https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg',
-  //   bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut libero nec elit ultrices elementum.',
-  // };
-
   const { user } = useUser();
+  const { data, error, loading } = useQuery(GET_USER, {
+    variables: {
+      username: user?.username,
+    },
+  });
+  const { isLoaded, signOut } = useAuth();
+  if (!isLoaded) {
+    return null;
+  }
+
+  const handleSignOut = (): void => {
+    signOut();
+  };
+
+  // console.log(data?.getUser.email);
+  const email = data?.getUser?.email;
+
+  if (loading) return <Text>Loading...</Text>;
+  if (error) return <Text>Error :</Text>;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <TouchableOpacity
+        style={{ position: 'absolute', right: 20, top: 60 }}
+        onPress={handleSignOut}>
+        <Ionicons name="log-out-outline" size={36} color="black" />
+      </TouchableOpacity>
       <View style={styles.header}>
         <Image
           source={{
@@ -23,7 +43,8 @@ export default function TabThreeScreen(): React.ReactNode {
           style={styles.avatar}
         />
         <Text style={styles.name}>{user?.username}</Text>
-        {/* <Text style={styles.email}>{user.}</Text> */}
+
+        <Text style={styles.email}>{email}</Text>
       </View>
       {/* <View style={styles.bioContainer}>
         <Text style={styles.bio}>{user.bio}</Text>
@@ -37,10 +58,13 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    paddingTop: 60,
+    paddingTop: 100,
+    paddingHorizontal: 20,
   },
   header: {
+    width: '100%',
     alignItems: 'center',
+    position: 'relative',
   },
   avatar: {
     width: 120,

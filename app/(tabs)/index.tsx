@@ -46,6 +46,7 @@ export default function TabOneScreen(): React.ReactNode {
               style={{
                 marginLeft: 30,
                 fontSize: 20,
+                color: 'black',
                 fontStyle: 'italic',
                 marginBottom: 20,
                 marginTop: 20,
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     margin: 0,
     padding: 0,
-    backgroundColor: '#fff',
+    backgroundColor: '#0000',
   },
   userView: {
     flexDirection: 'column',

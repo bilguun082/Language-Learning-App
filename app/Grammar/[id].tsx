@@ -21,7 +21,7 @@ export default function Page(): React.ReactNode {
     },
   });
 
-  if (loading) return <Text>Loading...</Text>;
+  if (loading || !data) return <Text>Loading...</Text>;
   if (error) return <Text>Error :</Text>;
   // const router = useRouter();
 
