@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { useGlobalSearchParams, useRouter, useFocusEffect } from 'expo-router';
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, ActivityIndicator } from 'react-native';
 
 import { GET_LESSON_TEST } from '../graphql/lessonTest';
 
@@ -248,9 +248,12 @@ const Page: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [score, setScore] = useState(0);
 
-  if (loading) {
-    return <Text>Loading...</Text>;
-  }
+  if (loading)
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
 
   if (error) {
     return <Text>Error fetching data</Text>;

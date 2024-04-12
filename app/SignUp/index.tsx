@@ -88,6 +88,8 @@ export default function SignUpScreen(): React.ReactNode {
       <Stack.Screen options={{ headerBackVisible: !pendingVerification }} />
       <Spinner visible={loading} />
 
+      <Text style={{ fontSize: 40, fontWeight: 'bold', marginBottom: 50 }}>Sign Up</Text>
+
       {!pendingVerification && (
         <>
           <TextInput
@@ -118,6 +120,15 @@ export default function SignUpScreen(): React.ReactNode {
             }}>
             <View style={styles.button}>
               <Text style={styles.text}>Sign Up</Text>
+            </View>
+          </TouchableOpacity>
+          <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Already have an account?</Text>
+          <TouchableOpacity
+            onPress={() => {
+              router.push('/SignIn/');
+            }}>
+            <View style={styles.button}>
+              <Text style={styles.text}>Sign In</Text>
             </View>
           </TouchableOpacity>
         </>
@@ -157,10 +168,10 @@ const styles = StyleSheet.create({
   inputField: {
     marginVertical: 4,
     width: '90%',
-    height: 50,
+    height: 60,
     borderWidth: 1,
     borderColor: '#6c47ff',
-    borderRadius: 4,
+    borderRadius: 20,
     padding: 10,
     backgroundColor: '#fff',
   },
@@ -171,7 +182,9 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.5,
     shadowRadius: 20,
-    width: 200,
+    width: 250,
+    height: 50,
+    justifyContent: 'center',
     alignItems: 'center',
     margin: 10,
     opacity: 1,

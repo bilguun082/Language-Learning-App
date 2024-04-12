@@ -48,6 +48,8 @@ export default function SignInScreen(): React.ReactNode {
     <View style={styles.container}>
       <Stack.Screen options={{ headerBackVisible: !successfulCreation }} />
 
+      <Text style={{ fontSize: 40, fontWeight: 'bold', marginBottom: 50 }}>Reset Password</Text>
+
       {!successfulCreation && (
         <>
           <TextInput
@@ -109,11 +111,11 @@ const styles = StyleSheet.create({
   },
   inputField: {
     marginVertical: 4,
-    height: 50,
     width: '90%',
+    height: 60,
     borderWidth: 1,
     borderColor: '#6c47ff',
-    borderRadius: 4,
+    borderRadius: 20,
     padding: 10,
     backgroundColor: '#fff',
   },
@@ -124,7 +126,9 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.5,
     shadowRadius: 20,
-    width: 200,
+    width: 250,
+    height: 50,
+    justifyContent: 'center',
     alignItems: 'center',
     margin: 10,
     opacity: 1,

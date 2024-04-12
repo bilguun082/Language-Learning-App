@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { useGlobalSearchParams } from 'expo-router';
 import React from 'react';
-import { Text, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 
 import { GET_VOCABULARY } from '@/app/graphql/vocabulary';
 import Slider from '@/components/VocabularySlider';
@@ -15,7 +15,12 @@ export default function Page(): React.ReactNode {
     },
   });
 
-  if (loading || !data) return <Text>Loading...</Text>;
+  if (loading || !data)
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
   if (error) return <Text>Error :</Text>;
 
   return (

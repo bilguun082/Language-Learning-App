@@ -2,9 +2,19 @@ import { useQuery } from '@apollo/client';
 import { useAuth, useUser } from '@clerk/clerk-expo';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 
 import { GET_USER } from '../graphql/user';
+
+import CircularProgress from '@/components/circle';
 
 export default function TabThreeScreen(): React.ReactNode {
   const { user } = useUser();
@@ -25,7 +35,12 @@ export default function TabThreeScreen(): React.ReactNode {
   // console.log(data?.getUser.email);
   const email = data?.getUser?.email;
 
-  if (loading) return <Text>Loading...</Text>;
+  if (loading)
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
   if (error) return <Text>Error :</Text>;
 
   return (
@@ -46,9 +61,11 @@ export default function TabThreeScreen(): React.ReactNode {
 
         <Text style={styles.email}>{email}</Text>
       </View>
-      {/* <View style={styles.bioContainer}>
-        <Text style={styles.bio}>{user.bio}</Text>
-      </View> */}
+
+      <View style={styles.bioContainer}>
+        <Text style={styles.bio}>Үйл явц</Text>
+        <CircularProgress percent={3} />
+      </View>
     </ScrollView>
   );
 }
@@ -84,13 +101,17 @@ const styles = StyleSheet.create({
   },
   bioContainer: {
     padding: 20,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: 'white',
     borderRadius: 10,
     marginHorizontal: 20,
     marginBottom: 20,
+    marginTop: 60,
+    alignItems: 'center',
   },
   bio: {
-    fontSize: 16,
+    fontSize: 20,
+    marginBottom: 20,
+    fontWeight: 'bold',
     textAlign: 'center',
   },
 });

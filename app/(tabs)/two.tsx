@@ -18,7 +18,12 @@ export default function TabTwoScreen(): React.ReactNode {
   const router = useRouter();
   const { data, error, loading } = useQuery(GET_ALL_VOCABULARIES);
 
-  if (loading) return <ActivityIndicator size="large" />;
+  if (loading)
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
   if (error) return <Text>Error :</Text>;
 
   return (

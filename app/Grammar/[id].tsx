@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { useGlobalSearchParams } from 'expo-router';
-import { Text, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 
 import Slider from '../../components/Slider';
 import { GET_LESSON } from '../graphql/lesson';
@@ -21,7 +21,12 @@ export default function Page(): React.ReactNode {
     },
   });
 
-  if (loading || !data) return <Text>Loading...</Text>;
+  if (loading || !data)
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
   if (error) return <Text>Error :</Text>;
   // const router = useRouter();
 

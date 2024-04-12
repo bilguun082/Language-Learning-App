@@ -1,6 +1,14 @@
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'expo-router';
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import { GET_ALL_LESSONS } from '../graphql/lesson';
 
@@ -11,7 +19,12 @@ export default function TabOneScreen(): React.ReactNode {
   // const [data,setData ] = useState()
   const router = useRouter();
 
-  if (loading) return <Text>Loading...</Text>;
+  if (loading)
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
   if (error) return <Text>Error :</Text>;
 
   return (

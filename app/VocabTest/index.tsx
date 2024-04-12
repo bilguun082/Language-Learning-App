@@ -9,6 +9,7 @@ import {
   Modal,
   Button,
   TouchableWithoutFeedback,
+  ActivityIndicator,
 } from 'react-native';
 
 import { GET_VOCABULARY_TEST } from '../graphql/vocabularyTest';
@@ -131,7 +132,11 @@ const Page: React.FC = () => {
   });
 
   if (loading || !data?.getVocabularyTest) {
-    return <Text>Loading...</Text>;
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
   }
 
   if (error) {
