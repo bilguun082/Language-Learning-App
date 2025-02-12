@@ -14,7 +14,7 @@ import { GET_ALL_VOCABULARIES } from '../graphql/vocabulary';
 
 import WordType from '@/components/WordType';
 
-export default function TabTwoScreen(): React.ReactNode {
+const TabTwoScreen: React.FC = () => {
   const router = useRouter();
   const { data, error, loading } = useQuery(GET_ALL_VOCABULARIES);
 
@@ -82,7 +82,7 @@ export default function TabTwoScreen(): React.ReactNode {
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -136,3 +136,5 @@ const styles = StyleSheet.create({
     padding: 5,
   },
 });
+
+export default TabTwoScreen;

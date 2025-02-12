@@ -16,7 +16,7 @@ import { GET_USER } from '../graphql/user';
 
 import CircularProgress from '@/components/circle';
 
-export default function TabThreeScreen(): React.ReactNode {
+const TabThreeScreen: React.FC = () => {
   const { user } = useUser();
   const { data, error, loading } = useQuery(GET_USER, {
     variables: {
@@ -68,7 +68,7 @@ export default function TabThreeScreen(): React.ReactNode {
       </View>
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -115,3 +115,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default TabThreeScreen;

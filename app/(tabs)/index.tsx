@@ -14,7 +14,7 @@ import { GET_ALL_LESSONS } from '../graphql/lesson';
 
 import WordType from '@/components/WordType';
 
-export default function TabOneScreen(): React.ReactNode {
+const TabOneScreen: React.FC = () => {
   const { data, error, loading } = useQuery(GET_ALL_LESSONS);
   // const [data,setData ] = useState()
   const router = useRouter();
@@ -84,7 +84,7 @@ export default function TabOneScreen(): React.ReactNode {
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -138,3 +138,5 @@ const styles = StyleSheet.create({
     padding: 5,
   },
 });
+
+export default TabOneScreen;

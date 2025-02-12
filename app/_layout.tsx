@@ -1,42 +1,18 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
-import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
-import { Stack, useRouter } from 'expo-router';
-import { useEffect } from 'react';
+import { ClerkProvider } from '@clerk/clerk-expo';
+import { Slot } from 'expo-router';
+import React from 'react';
 
 const RootLayoutNav: React.FC = () => {
   const client = new ApolloClient({
     uri: 'https://app-backend-mauve.vercel.app/api/graphql',
     cache: new InMemoryCache(),
   });
-  const InitialLayout = (): React.JSX.Element => {
-    const { isLoaded, isSignedIn } = useAuth();
-    const router = useRouter();
-    // If the user is signed in, redirect them to the home page
-    // If the user is not signed in, redirect them to the login page
-    useEffect(() => {
-      if (!isLoaded) return;
-
-      if (!isSignedIn) {
-        router.replace('/SignIn/');
-      }
-    }, [isSignedIn]);
-
-    return (
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="Grammar/[id]" options={{ headerShown: false }} />
-        <Stack.Screen name="Vocabulary/[id]" options={{ headerShown: false }} />
-        <Stack.Screen name="SignIn" options={{ headerShown: false }} />
-        <Stack.Screen name="SignUp" options={{ headerShown: false }} />
-        <Stack.Screen name="Reset" options={{ headerShown: false }} />
-      </Stack>
-    );
-  };
 
   return (
     <ApolloProvider client={client}>
       <ClerkProvider publishableKey={`${process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY}`}>
-        <InitialLayout />
+        <Slot />
       </ClerkProvider>
     </ApolloProvider>
   );
